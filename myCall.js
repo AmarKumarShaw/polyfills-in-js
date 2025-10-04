@@ -9,7 +9,7 @@ function purchaseCar(currency,price){
         `I have purchased ${this.color} - ${this.company} car for ${currency}${price}`
     )
 }
-
+// Simple Polyfill For Call
 Function.prototype.myCall = function(context={},args){
     if(typeof this !== "function"){
         throw new Error(this+"This is not Callable")
@@ -18,3 +18,18 @@ Function.prototype.myCall = function(context={},args){
     context.fn(...args)
 }
 purchaseCar.myCall(car1,"$","5000")
+
+// Advance Polyfill For Call including some edge cases 
+Function.prototype.myAdvanceCall =  function(context,...args){
+
+    context = context ||  globalThis;
+
+    const fnSymbol = Symbol();
+    context[fnSymbol] = this;
+
+
+    const results =  context[fnSymbol](...args);
+    delete context[fnSymbol];
+
+    return results;
+}
