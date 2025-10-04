@@ -23,3 +23,19 @@ Function.prototype.myApply=function(context={},args=[]){
 }
 
 purchaseCar.myApply(car1,["Rupees: 50000"])
+
+
+// Advance Polyfill For Apply
+Function.prototype.myApply = function(context,args=[]){
+    context = context || globalThis;
+    
+    const fnSymbol = Symbol();
+    context[fnSymbol]=this;
+    
+    results = context[fnSymbol](...args)
+    
+    delete context[fnSymbol];
+    return results;
+}
+
+
